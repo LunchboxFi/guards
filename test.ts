@@ -3,6 +3,8 @@ import { deterministicScrambler } from "./privateScrambler.js";
 import { Keypair } from "@solana/web3.js";
 import { encryptAndDecryptText } from "./e.js";
 import { scramblePin } from "./scrambler.js";
+import { decryptPrivateKey } from "./e.js";
+import { decryptionKey } from "./TEE.js";
 
 function encrypt(PIN: number, privateKey: any) {
   
@@ -11,12 +13,16 @@ function encrypt(PIN: number, privateKey: any) {
 
   const userSecret = scramblePin(PIN, userNonce)
   const privateKeyPassword = deterministicScrambler(userSecret, protocolNonce)
-
+  console.log(privateKeyPassword)
   const keypair = privateKey
 
   const value = encryptAndDecryptText(privateKeyPassword, protocolNonce, keypair)
-  console.log(value)
+
+  const decryptionKeyy = decryptionKey(userSecret, protocolNonce, protocolNonce, value)
+  const decrypt = decryptPrivateKey(privateKey, protocolNonce, key)
 }
+
+
 
 const key = Keypair.generate().secretKey.toString()
 const PIN = 9923

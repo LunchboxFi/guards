@@ -6,7 +6,7 @@ const keypair = Keypair.generate().secretKey
 // console.log(keypair)
 // console.log(keypair.toString())
 
-export function encryptAndDecryptText(inputString: string, ivString: string, textToEncrypt: string) {
+export function encryptAndDecryptText(inputString: any, ivString: any, textToEncrypt: any) {
     // Convert the input string into a buffer
     const inputBuffer = Buffer.from(inputString, 'utf-8');
     const keyLength = 256;
@@ -30,17 +30,22 @@ export function encryptAndDecryptText(inputString: string, ivString: string, tex
     let encryptedText = cipher.update(textToEncrypt, 'utf8', 'hex');
     encryptedText += cipher.final('hex');
   
+   
+  
+    return {
+      encryptedText,
+    };
+  }
+
+  export function decryptPrivateKey(encryptedText: any, iv:any, encryptionKey: any) {
     // Create an AES decipher object with the same key and IV for decryption
     const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(encryptionKey, 'hex'), iv);
   
     // Decrypt the encrypted text
     let decryptedText = decipher.update(encryptedText, 'hex', 'utf8');
     decryptedText += decipher.final('utf8');
-  
-    return {
-      encryptedText,
-      decryptedText,
-    };
+
+    return decryptedText
   }
   
   // Example usage:
