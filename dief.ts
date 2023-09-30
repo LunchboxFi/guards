@@ -33,3 +33,12 @@ const sharedSecretB = A.modPow(bBigInt, p);
 console.log('Shared Secret A:', sharedSecretA.toString(16));
 console.log('Shared Secret B:', sharedSecretB.toString(16));
 
+const Astring = sharedSecretA.toString(16)
+const Ahex = Buffer.from(Astring, 'utf-8').toString('hex');
+
+
+const Bstring = sharedSecretA.toString(16)
+const Bhex = Buffer.from(Bstring, 'utf-8').toString('hex');
+
+const result = parseInt(Ahex, 16) / parseInt(Bhex, 16);
+console.log(result)
