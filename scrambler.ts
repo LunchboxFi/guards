@@ -17,4 +17,4 @@ const pin = 5373; // Your 4-digit PIN
 const randomString = 'Er3df4%@#Q'; // Random string
 
 const scrambledPin = scramblePin(pin, randomString);
-console.log('Scrambled PIN:', scrambledPin);
+// console.log('Scrambled PIN:', scrambledPin);

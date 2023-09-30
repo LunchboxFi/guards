@@ -33,4 +33,4 @@ function shuffleString(str: string) {
 // Generate a unique random string
 const uniqueRandomString = generateUniqueRandomString();
 
-console.log('Unique Random String:', uniqueRandomString);
+// console.log('Unique Random String:', uniqueRandomString);

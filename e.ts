@@ -49,7 +49,7 @@ export function encryptAndDecryptText(inputString: string, ivString: string, tex
   const ivString = 'myinitialvector1234';
   const textToEncrypt = 'Hello, this is a secret message!';
   
-  const result = encryptAndDecryptText(inputString, ivString, textToEncrypt);
+//   const result = encryptAndDecryptText(inputString, ivString, textToEncrypt);
   
-  console.log('Encrypted Text:', result.encryptedText);
-  console.log('Decrypted Text:', result.decryptedText);
+//   console.log('Encrypted Text:', result.encryptedText);
+//   console.log('Decrypted Text:', result.decryptedText);

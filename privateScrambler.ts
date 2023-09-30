@@ -22,6 +22,6 @@ import crypto from 'crypto'
     const value1 = '0378390e4d2ec4cd0283423d1c403b2577659bd6637386d42e86267d5b392c2d';
     const value2 = '5LUGQ6f=h=fZxhpn';
     
-    const scrambledResult = deterministicScrambler(value1, value2);
-    console.log('Scrambled Result:', scrambledResult);
+    // const scrambledResult = deterministicScrambler(value1, value2);
+    // console.log('Scrambled Result:', scrambledResult);
     
