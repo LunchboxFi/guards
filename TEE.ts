@@ -1,16 +1,17 @@
 import { deterministicScrambler } from "./privateScrambler.js";
-import { decryptPrivateKey } from "./e.js";
+import { decryptDerive } from "./e.js";
 import { verifyOwnership } from "./dief.js";
 //This computation will be done in private solana program or a TEE
 
-export function decryptionKey(hashA: any, hashB: any, iv:any, privateKey: any) {
+export function decryptionKey(userSecret: any, protocolNonce: any, value: any ): any {
   
   //basically saying are you sure you're who you claim to be?
-  const checker = verifyOwnership(hashA, hashB);
+  const checker = verifyOwnership(userSecret, protocolNonce);
 
   if (checker === true) {
-    const key = deterministicScrambler(hashA, hashB)
-    const password = decryptPrivateKey(privateKey, iv, key)
+    const key = deterministicScrambler(userSecret, protocolNonce)
+    const privateKey = decryptDerive(key, protocolNonce, value)
+    return privateKey
   }
   
   return checker

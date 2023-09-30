@@ -5,56 +5,48 @@ const keypair = Keypair.generate().secretKey
 
 // console.log(keypair)
 // console.log(keypair.toString())
+function encryptDerive(inputString: any, ivString: any, textToEncrypt: any) {
+  const inputBuffer = Buffer.from(inputString, 'utf-8');
+  const keyLength = 256;
+  const hash = crypto.createHash('sha256');
+  hash.update(inputBuffer);
+  const aesKey = hash.digest().slice(0, keyLength / 8);
+  const encryptionKey = aesKey.toString('hex');
+  const iv = Buffer.alloc(16);
+  iv.write(ivString, 'utf8');
+  const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(encryptionKey, 'hex'), iv);
+  let encryptedText = cipher.update(textToEncrypt, 'utf8', 'hex');
+  encryptedText += cipher.final('hex');
+  return encryptedText;
+}
 
-export function encryptAndDecryptText(inputString: any, ivString: any, textToEncrypt: any) {
-    // Convert the input string into a buffer
-    const inputBuffer = Buffer.from(inputString, 'utf-8');
-    const keyLength = 256;
-    // Generate a cryptographic hash of the input string (use a strong hash function)
-    const hash = crypto.createHash('sha256'); // You can use other hash functions as well
-    hash.update(inputBuffer);
-  
-    // Derive the AES encryption key from the hash
-    const aesKey = hash.digest().slice(0, keyLength / 8); // 8 bits in a byte
-  
-    const encryptionKey = aesKey.toString('hex'); // 256 bits for AES-256
-  
-    // Convert the IV string to a buffer
-    const iv = Buffer.alloc(16);
-    iv.write(ivString, 'utf8');
-  
-    // Create an AES cipher object with the specified key and IV
-    const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(encryptionKey, 'hex'), iv);
-  
-    // Encrypt the text
-    let encryptedText = cipher.update(textToEncrypt, 'utf8', 'hex');
-    encryptedText += cipher.final('hex');
-  
-   
-  
-    return {
-      encryptedText,
-    };
-  }
+function decryptDerive(inputString: any, ivString: any, encryptedText: any) {
+  const inputBuffer = Buffer.from(inputString, 'utf-8');
+  const keyLength = 256;
+  const hash = crypto.createHash('sha256');
+  hash.update(inputBuffer);
+  const aesKey = hash.digest().slice(0, keyLength / 8);
+  const encryptionKey = aesKey.toString('hex');
+  const iv = Buffer.alloc(16);
+  iv.write(ivString, 'utf8');
+  // const iv = Buffer.from(ivString, 'utf8'); // Use the same IV for encryption and decryption
+  const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(encryptionKey, 'hex'), iv);
+  let decryptedText = decipher.update(encryptedText, 'hex', 'utf8');
+  decryptedText += decipher.final('utf8');
+  return decryptedText;
+}
 
-  export function decryptPrivateKey(encryptedText: any, iv:any, encryptionKey: any) {
-    // Create an AES decipher object with the same key and IV for decryption
-    const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(encryptionKey, 'hex'), iv);
-  
-    // Decrypt the encrypted text
-    let decryptedText = decipher.update(encryptedText, 'hex', 'utf8');
-    decryptedText += decipher.final('utf8');
-
-    return decryptedText
-  }
+export { encryptDerive, decryptDerive };
   
   // Example usage:
-  const inputString = 'YourSecretString';
+  const password = 'YourSecretString';
   
-  const ivString = 'myinitialvector1234';
+  const ivString = 'myinitidknwNJDNNKNKDKNKmkDKDNMkdnnkenoru234';
   const textToEncrypt = 'Hello, this is a secret message!';
   
-//   const result = encryptAndDecryptText(inputString, ivString, textToEncrypt);
+  // const result = encryptDerive(password, ivString, textToEncrypt);
+  // const decipher = decryptDerive(password, ivString, result)
   
-//   console.log('Encrypted Text:', result.encryptedText);
+  // console.log('Encrypted Text:', result);
+  // console.log('Decrypted Text:', decipher);
 //   console.log('Decrypted Text:', result.decryptedText);

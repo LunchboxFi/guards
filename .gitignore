@@ -3,3 +3,8 @@ mint.json
 
 # Ignore .env file
 .env
+
+
+# Added by cargo
+
+/target
