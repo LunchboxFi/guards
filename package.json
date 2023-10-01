@@ -5,7 +5,7 @@
 	"version": "0.1.0",
 	"type": "module",
 	"scripts": {
-		"dev": "ts-node --experimental-specifier-resolution=node ./index.ts ",
+		"dev": "ts-node --experimental-specifier-resolution=node ./fetch.ts ",
 		"build": "tsc",
 		"execute": "node --experimental-specifier-resolution=node --no-warnings ./lib/main.js",
 		"bonus": "node --experimental-specifier-resolution=node --no-warnings ./lib/bonus.js > aep.txt",

@@ -3,6 +3,7 @@ import { Connection, clusterApiUrl, Keypair } from '@solana/web3.js'
 import * as web3 from "@solana/web3.js";
 import { Permission, Permissions } from "@sqds/multisig/lib/types.js";
 import fs from 'fs'
+import bs58 from "bs58";
 // Cluster Connection
 
 export function loadWalletKey(keypairFile:string): web3.Keypair {
@@ -16,10 +17,16 @@ const connection = new Connection( clusterApiUrl('devnet'),'confirmed');
 
 // Random Public Key that will be used to derive a multisig PDA
 const createKey = Keypair.generate();
+console.log(createKey.publicKey.toBase58())
+
 const second = Keypair.generate().publicKey;
+
+const second1 = new web3.PublicKey('FY2MFVEfkCcifK5kAab6wctb6jeT17WzdEZvZNkW816r')
 
 // Creator should be a Keypair or a Wallet Adapter wallet
 const creator = loadWalletKey("mint.json")
+
+console.log(bs58.encode(creator.secretKey))
 
 
 // Derive the multisig PDA
@@ -51,7 +58,7 @@ async function createMultisigAndPrintSignature() {
           },
           {
             // Members Public Key
-            key: second,
+            key: second1,
             // Members permissions inside the multisig
             permissions: Permissions.all(),
           }
@@ -60,7 +67,7 @@ async function createMultisigAndPrintSignature() {
         timeLock: 0,
       });
   
-      console.log("Multisig created. Signature: ", signature);
+      console.log("Multisig created. Signature: ", signature, "MultiSig:"+ multisigPda.toBase58());
     } catch (error) {
       console.error("Error creating multisig:", error);
     }
