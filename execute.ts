@@ -15,7 +15,7 @@ import fs from "fs";
 // Cluster Connection
 const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
 const createKey = new PublicKey(
-  "A3hF1No2cc8E5ZFRVmk7iuyrs9pEWm3yza2dbooAbPb8"
+  "7ZAdU1VQiKPZS4xq84mJ3rK7JoNDY1Ta8NS8Rn5fmJkR"
 );
 
 const publicKey = new PublicKey(
@@ -39,6 +39,7 @@ const creator = loadWalletKey("mint.json");
 const multisigPda = multisig.getMultisigPda({
   createKey,
 })[0];
+
 
 async function getAccountInfo(connection: Connection, publicKey: PublicKey) {
   const info: AccountInfo<Buffer | null> | null =
@@ -89,8 +90,8 @@ async function getAccountInfo(connection: Connection, publicKey: PublicKey) {
       multisigPda,
       transactionIndex,
       creator: creator.publicKey,
-      vaultIndex: 0,
-      ephemeralSigners: 1,
+      vaultIndex: 1,
+      ephemeralSigners: 0,
       transactionMessage: testTransferMessage,
     });
     await connection.confirmTransaction(signature);
@@ -139,13 +140,14 @@ async function getAccountInfo(connection: Connection, publicKey: PublicKey) {
     console.log("Approved " + signature);
 
     // Check if the vault transaction execute account exists before executing
-
+    console.log(transactionIndex)
     signature = await multisig.rpc.vaultTransactionExecute({
       connection,
       feePayer: creator,
       multisigPda,
       transactionIndex,
       member: creator.publicKey,
+      
     });
     await connection.confirmTransaction(signature);
 

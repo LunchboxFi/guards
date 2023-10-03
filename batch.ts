@@ -150,6 +150,7 @@ signature = await multisig.rpc.proposalActivate({
   multisigPda,
   member: creator,
   transactionIndex: batchIndex,
+  signers: [creator.publicKey]
 });
 
 await connection.confirmTransaction(signature);

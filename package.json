@@ -5,7 +5,7 @@
 	"version": "0.1.0",
 	"type": "module",
 	"scripts": {
-		"dev": "ts-node --experimental-specifier-resolution=node ./sdk.ts ",
+		"dev": "ts-node --experimental-specifier-resolution=node ./batch.ts ",
 		"build": "tsc",
 		"transt": "ts-node --experimental-specifier-resolution=node ./createTransaction.ts ",
 		"vault": "ts-node --experimental-specifier-resolution=node ./vault.ts ",
