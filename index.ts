@@ -56,12 +56,12 @@ async function createMultisigAndPrintSignature() {
             // Members permissions inside the multisig
             permissions: Permissions.all(),
           },
-          {
-            // Members Public Key
-            key: second1,
-            // Members permissions inside the multisig
-            permissions: Permissions.fromPermissions([Permission.Execute]),
-          }
+          // {
+          //   // Members Public Key
+          //   key: second1,
+          //   // Members permissions inside the multisig
+          //   permissions: Permissions.fromPermissions([Permission.Execute]),
+          // }
         ],
         // This means that there need to be 2 votes for a transaction proposal to be approved
         timeLock: 0,

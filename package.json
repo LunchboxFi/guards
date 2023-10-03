@@ -21,7 +21,7 @@
 	},
 	"dependencies": {
 		"@ladderlabs/buddy-sdk": "^0.2.7",
-		"@solana/web3.js": "^1.78.4",
+		"@solana/web3.js": "1.70.3",
 		"@sqds/multisig": "^1.10.0",
 		"@sqds/sdk": "^2.0.4",
 		"@types/chai": "^4.3.6",
