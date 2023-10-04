@@ -4,6 +4,9 @@
 	"private": true,
 	"version": "0.1.0",
 	"type": "module",
+	"publishConfig": {
+		"@Ife2002:registry": "https://npm.pkg.github.com"
+	},
 	"scripts": {
 		"dev": "ts-node --experimental-specifier-resolution=node ./batch.ts ",
 		"build": "tsc",
