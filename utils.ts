@@ -17,6 +17,13 @@ import {
     );
     return loaded;
   }
+
+  export function loadWalletKeypair(keypairFile: Array<number>): Keypair {
+    const loaded = Keypair.fromSecretKey(
+      new Uint8Array(keypairFile)
+    );
+    return loaded;
+  }
   
   export type TestMembers = {
     almighty: Keypair;

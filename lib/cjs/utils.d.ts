@@ -1,5 +1,6 @@
 import { Connection, Keypair, PublicKey } from "@solana/web3.js";
 export declare function loadWalletKey(keypairFile: string): Keypair;
+export declare function loadWalletKeypair(keypairFile: Array<number>): Keypair;
 export type TestMembers = {
     almighty: Keypair;
     proposer: Keypair;
