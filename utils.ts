@@ -5,9 +5,18 @@ import {
     PublicKey,
     SystemProgram,
   } from "@solana/web3.js";
+
   import * as multisig from "@sqds/multisig";
+  import fs from 'fs'
   
   const { Permission, Permissions } = multisig.types;
+
+  export function loadWalletKey(keypairFile: string): Keypair {
+    const loaded = Keypair.fromSecretKey(
+      new Uint8Array(JSON.parse(fs.readFileSync(keypairFile).toString()))
+    );
+    return loaded;
+  }
   
   export type TestMembers = {
     almighty: Keypair;

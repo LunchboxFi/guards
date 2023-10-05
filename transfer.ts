@@ -1,55 +1,32 @@
-import * as multisig from "@sqds/multisig";
 import {
-  Keypair,
   Connection,
-  clusterApiUrl,
   PublicKey,
   SystemProgram,
-  LAMPORTS_PER_SOL,
   TransactionMessage,
-  AccountInfo,
+  Keypair,
+  clusterApiUrl,
+  LAMPORTS_PER_SOL,
 } from "@solana/web3.js";
 import * as web3 from "@solana/web3.js";
-import fs from "fs";
+import { loadWalletKey } from "./utils.js";
+import * as multisig from "@sqds/multisig"; // Replace with the correct import path
 
-// Cluster Connection
-const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
-const createKey = new PublicKey(
-  "7ZAdU1VQiKPZS4xq84mJ3rK7JoNDY1Ta8NS8Rn5fmJkR"
-);
-
-const publicKey = new PublicKey(
-  "8udd3YR2vHN69zqHfgrAGAZuqhVAMpC2mU3RVe2q1Wzi"
-);
-
-const second = new web3.PublicKey(
-  "FY2MFVEfkCcifK5kAab6wctb6jeT17WzdEZvZNkW816r"
-);
-
-export function loadWalletKey(keypairFile: string): web3.Keypair {
-  const loaded = web3.Keypair.fromSecretKey(
-    new Uint8Array(JSON.parse(fs.readFileSync(keypairFile).toString()))
-  );
-  return loaded;
-}
-
-const creator = loadWalletKey("mint.json");
-
-// Derive the multisig PDA
-const multisigPda = multisig.getMultisigPda({
-  createKey,
-})[0];
-
-
-async function getAccountInfo(connection: Connection, publicKey: PublicKey) {
-  const info: AccountInfo<Buffer | null> | null =
-    await connection.getAccountInfo(publicKey);
-  return info;
-}
-
-(async () => {
+async function transferSOL(
+  RPC: web3.Cluster,
+  memberOne : Keypair,
+  to: PublicKey,
+  createKey: PublicKey,
+  amount: number,
+  signers: web3.Keypair[]
+) {
   try {
-    let multisigAccount = await multisig.accounts.accountProviders.Multisig.fromAccountAddress(
+    const connection = new Connection(clusterApiUrl(RPC), "confirmed");
+
+    const multisigPda = multisig.getMultisigPda({
+      createKey: createKey,
+    })[0];
+
+    const multisigAccount = await multisig.accounts.accountProviders.Multisig.fromAccountAddress(
       connection,
       multisigPda
     );
@@ -61,20 +38,20 @@ async function getAccountInfo(connection: Connection, publicKey: PublicKey) {
 
     console.log("Vault " + vaultPda);
 
-    const transactionIndex =
-      multisig.utils.toBigInt(multisigAccount.transactionIndex) + 1n;
-    console.log(transactionIndex);
+    const transactionIndex = multisig.utils.toBigInt(
+      multisigAccount.transactionIndex
+    ) + 1n;
+
+    const transferParams = {
+      fromPubkey: vaultPda,
+      toPubkey: to,
+      lamports: amount * LAMPORTS_PER_SOL,
+    };
 
     const [transactionPda] = multisig.getTransactionPda({
       multisigPda,
       index: transactionIndex,
     });
-
-    const transferParams = {
-      fromPubkey: vaultPda,
-      toPubkey: publicKey,
-      lamports: 0.2 * LAMPORTS_PER_SOL,
-    };
 
     const transferInstruction = SystemProgram.transfer(transferParams);
 
@@ -84,41 +61,43 @@ async function getAccountInfo(connection: Connection, publicKey: PublicKey) {
       instructions: [transferInstruction],
     });
 
+
     let signature = await multisig.rpc.vaultTransactionCreate({
       connection,
-      feePayer: creator,
+      feePayer: signers[0], // Use the first signer as the fee payer
       multisigPda,
       transactionIndex,
-      creator: creator.publicKey,
+      creator: memberOne.publicKey,
       vaultIndex: 1,
-      ephemeralSigners: 0,
+      ephemeralSigners: 0, // Replace with the actual number of ephemeral signers
       transactionMessage: testTransferMessage,
     });
-    await connection.confirmTransaction(signature);
 
+    await connection.confirmTransaction(signature);
 
     signature = await multisig.rpc.proposalCreate({
       connection,
-      feePayer: creator,
+      feePayer: memberOne,
       multisigPda,
       transactionIndex,
-      creator: creator,
+      creator: memberOne,
       isDraft: true,
     });
 
     await connection.confirmTransaction(signature);
-
 
     const [proposalPda] = multisig.getProposalPda({
       multisigPda,
       transactionIndex,
     });
 
+    console.log(proposalPda);
+
     signature = await multisig.rpc.proposalActivate({
       connection,
-      feePayer: creator,
+      feePayer: memberOne,
       multisigPda,
-      member: creator,
+      member: memberOne,
       transactionIndex,
     });
 
@@ -126,28 +105,41 @@ async function getAccountInfo(connection: Connection, publicKey: PublicKey) {
 
     signature = await multisig.rpc.proposalApprove({
       connection,
-      feePayer: creator,
+      feePayer: memberOne,
       multisigPda,
-      member: creator,
+      member: memberOne,
       transactionIndex,
       memo: "First transaction",
     });
+
     await connection.confirmTransaction(signature);
 
-    // Check if the vault transaction execute account exists before executing
-    console.log(transactionIndex)
     signature = await multisig.rpc.vaultTransactionExecute({
       connection,
-      feePayer: creator,
+      feePayer: memberOne,
       multisigPda,
       transactionIndex,
-      member: creator.publicKey,
+      member: memberOne.publicKey,
       
     });
+
     await connection.confirmTransaction(signature);
 
     console.log(signature);
+
   } catch (error) {
     console.error("Error:", error);
   }
-})();
+}
+
+// Example usage:
+// Replace the placeholders with actual values
+const RPC = "devnet"
+const to = new PublicKey("8D2AoV1TqSLN3GKFJD1tujiK8RK9RGkkkwug1McKStiC");
+const memberOne = loadWalletKey("mint.json");
+const amount = 0.02; // Amount in SOL
+const signers = [memberOne]; // Load your keypair
+const createKey = new PublicKey("7ZAdU1VQiKPZS4xq84mJ3rK7JoNDY1Ta8NS8Rn5fmJkR");
+
+transferSOL( RPC, memberOne, to, createKey, amount, signers);
+
