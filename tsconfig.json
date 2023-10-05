@@ -7,7 +7,7 @@
 		"skipLibCheck": true,
 		"esModuleInterop": true,
 		"outDir": "lib",
-
+        "declaration": true,
 		/* Bundler mode */
 
 		/* Linting */
