@@ -11,7 +11,7 @@ import * as web3 from "@solana/web3.js";
 import { loadWalletKey } from "./utils.js";
 import * as multisig from "@sqds/multisig"; // Replace with the correct import path
 
-async function transferSOL(
+export async function transferSOL(
   RPC: web3.Cluster,
   memberOne : Keypair,
   to: PublicKey,
