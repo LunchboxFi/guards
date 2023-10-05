@@ -1,5 +1,5 @@
 Arguments: 
-  /home/gitpod/.nvm/versions/node/v18.18.0/bin/node /home/gitpod/.nvm/versions/node/v18.18.0/bin/yarn tsc
+  /home/gitpod/.nvm/versions/node/v18.18.0/bin/node /home/gitpod/.nvm/versions/node/v18.18.0/bin/yarn run dev
 
 PATH: 
   /home/gitpod/.sdkman/candidates/maven/current/bin:/home/gitpod/.sdkman/candidates/java/current/bin:/home/gitpod/.sdkman/candidates/gradle/current/bin:/workspace/.cargo/bin:/home/gitpod/.rvm/gems/ruby-3.2.2/bin:/home/gitpod/.rvm/gems/ruby-3.2.2@global/bin:/home/gitpod/.rvm/rubies/ruby-3.2.2/bin:/home/gitpod/.pyenv/shims:/workspace/go/bin:/home/gitpod/.nix-profile/bin:/ide/bin/remote-cli:/home/gitpod/go/bin:/home/gitpod/go-packages/bin:/home/gitpod/.nvm/versions/node/v18.18.0/bin:/home/gitpod/.yarn/bin:/home/gitpod/.pnpm:/home/gitpod/.pyenv/bin:/home/gitpod/.rvm/bin:/home/gitpod/.cargo/bin:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin/:/home/gitpod/.local/bin:/usr/games:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/gitpod/.nvm/versions/node/v18.18.0/bin:/home/gitpod/.rvm/bin
@@ -28,17 +28,19 @@ npm manifest:
   {
     "name": "@lunchboxfi/sdk",
     "private": false,
-    "version": "0.1.37",
+    "version": "0.1.11",
     "type": "module",
     "main": "./dist/cjs/index.js",
     "module": "./dist/esm/index.js",
-    "types": "./dist/types/index.d.ts",
+    "files": [
+      "lib/"
+    ],
     "publishConfig": {
       "@ozodimgba": "https://npm.pkg.github.com"
     },
     "scripts": {
       "dev": "ts-node --experimental-specifier-resolution=node ./batch.ts ",
-      "tsc": "tsc -p tsconfig.json",
+      "tsc": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
       "generate": "yarn solita",
       "ts": "tsc --noEmit",
       "prepare:canary": "yarn build && npm version --prerelease --preid=canary",
@@ -47,6 +49,7 @@ npm manifest:
       "execute": "node --experimental-specifier-resolution=node --no-warnings ./lib/main.js",
       "bonus": "node --experimental-specifier-resolution=node --no-warnings ./lib/bonus.js > aep.txt",
       "test": "ts-mocha -p tsconfig.json -t 1000000  ./sdk.ts",
+      "prepublishOnly": "npm run tsc",
       "postinstall": "patch-package"
     },
     "devDependencies": {

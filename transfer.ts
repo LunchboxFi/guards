@@ -134,12 +134,12 @@ export async function transferSOL(
 
 // Example usage:
 // Replace the placeholders with actual values
-const RPC = "devnet"
-const to = new PublicKey("8D2AoV1TqSLN3GKFJD1tujiK8RK9RGkkkwug1McKStiC");
-const memberOne = loadWalletKey("mint.json");
-const amount = 0.02; // Amount in SOL
-const signers = [memberOne]; // Load your keypair
-const createKey = new PublicKey("7ZAdU1VQiKPZS4xq84mJ3rK7JoNDY1Ta8NS8Rn5fmJkR");
+// const RPC = "devnet"
+// const to = new PublicKey("8D2AoV1TqSLN3GKFJD1tujiK8RK9RGkkkwug1McKStiC");
+// const memberOne = loadWalletKey("mint.json");
+// const amount = 0.02; // Amount in SOL
+// const signers = [memberOne]; // Load your keypair
+// const createKey = new PublicKey("7ZAdU1VQiKPZS4xq84mJ3rK7JoNDY1Ta8NS8Rn5fmJkR");
 
-transferSOL( RPC, memberOne, to, createKey, amount, signers);
+// transferSOL( RPC, memberOne, to, createKey, amount, signers);
 
