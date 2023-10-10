@@ -2,25 +2,25 @@ import * as multisig from "@sqds/multisig";
 import { Connection, clusterApiUrl, Keypair } from '@solana/web3.js'
 import * as web3 from "@solana/web3.js";
 import { Permission, Permissions } from "@sqds/multisig/lib/types.js";
-import { loadWalletKeypair } from "./utils.js";
+import { loadWalletKey, loadWalletKeypair } from "./utils.js";
 import fs from 'fs'
 import bs58 from "bs58";
 
-export async function createMultisig(RPC: web3.Cluster, KEYPAIR: any) {
+export async function createMultisig(RPC: web3.Cluster) {
   // Cluster Connection
   const connection = new Connection(clusterApiUrl(RPC),'confirmed');
 
   // Random Public Key that will be used to derive a multisig PDA
   const createKey = Keypair.generate();
 
-  const primary = Keypair.generate()
+  const primary = loadWalletKey('mint.json')
 
   const secondary = Keypair.generate()
 
   const advisor = Keypair.generate();
 
   // Creator should be a Keypair or a Wallet Adapter wallet
-  const creator = loadWalletKeypair(KEYPAIR)
+  const creator = loadWalletKey('mint.json')
 
   // Derive the multisig PDA
   const [multisigPda] = multisig.getMultisigPda({ createKey: createKey.publicKey });
@@ -74,7 +74,7 @@ export async function createMultisig(RPC: web3.Cluster, KEYPAIR: any) {
 }
 
 // Call the async function to create the multisig and print the signature
-// createMultisig("devnet", KEYPAIR)
-//  .then((r) => {
-//     console.log(r)
-//  })
+createMultisig("devnet")
+ .then((r) => {
+    console.log(r)
+ })

@@ -1,7 +1,7 @@
 {
   "name": "@lunchboxfi/sdk",
   "private": false,
-  "version": "0.1.14",
+  "version": "0.1.15",
   "type": "module",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -17,7 +17,7 @@
     "generate": "yarn solita",
     "ts": "tsc --noEmit",
     "prepare:canary": "yarn build && npm version --prerelease --preid=canary",
-    "transt": "ts-node --experimental-specifier-resolution=node ./createTransaction.ts ",
+    "transt": "ts-node --experimental-specifier-resolution=node ./transfer.ts ",
     "vault": "ts-node --experimental-specifier-resolution=node ./vault.ts ",
     "execute": "node --experimental-specifier-resolution=node --no-warnings ./lib/main.js",
     "bonus": "node --experimental-specifier-resolution=node --no-warnings ./lib/bonus.js > aep.txt",

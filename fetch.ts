@@ -14,7 +14,7 @@ export async function fetchMultisigAccount(multisigBs58: string, RPC: Cluster) {
     );
 
     // Log out the multisig's members
-    console.log(multisigAccount);
+    console.log(multisigAccount.members);
 
     return multisigAccount
 
@@ -24,4 +24,4 @@ export async function fetchMultisigAccount(multisigBs58: string, RPC: Cluster) {
 }
 
 // Call the async function to fetch the multisig account
-// fetchMultisigAccount("7pg8n82ccrsQs4CFFFT2xJhj2P1FrweQzysAqbryuWTw", "devnet");
+fetchMultisigAccount("8KNtgtoaaxsGvt67PxKZC3Fht93GziJt23ky9qFx9Bq5", "devnet");
