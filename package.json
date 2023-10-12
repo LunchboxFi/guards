@@ -1,7 +1,7 @@
 {
   "name": "@lunchboxfi/sdk",
   "private": false,
-  "version": "0.1.16",
+  "version": "0.1.17",
   "type": "module",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -19,8 +19,6 @@
     "prepare:canary": "yarn build && npm version --prerelease --preid=canary",
     "transt": "ts-node --experimental-specifier-resolution=node ./transfer.ts ",
     "vault": "ts-node --experimental-specifier-resolution=node ./vault.ts ",
-    "execute": "node --experimental-specifier-resolution=node --no-warnings ./lib/main.js",
-    "bonus": "node --experimental-specifier-resolution=node --no-warnings ./lib/bonus.js > aep.txt",
     "test": "ts-mocha -p tsconfig.json -t 1000000  ./sdk.ts",
     "prepublishOnly": "npm run tsc",
     "postinstall": "patch-package"
