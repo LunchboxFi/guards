@@ -5,7 +5,7 @@ import { Period } from "@sqds/multisig/lib/types.js";
 
 
 // Cluster Connection
-export default async function addSpendingLimit(multisigPda: PublicKey, Cluster: Cluster, token: PublicKey) {
+export async function addSpendingLimit(multisigPda: PublicKey, Cluster: Cluster, token: PublicKey) {
 
     const connection = new Connection(clusterApiUrl(Cluster), "confirmed");
   
