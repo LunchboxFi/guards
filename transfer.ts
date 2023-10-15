@@ -8,7 +8,7 @@ import {
   LAMPORTS_PER_SOL,
 } from "@solana/web3.js";
 import * as web3 from "@solana/web3.js";
-import { loadWalletKeypair, loadWalletKey } from "./utils.js";
+import { loadWalletKeypair } from "./utils.js";
 import * as multisig from "@sqds/multisig"; // Replace with the correct import path
 
 export async function transferSOL(
