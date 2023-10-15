@@ -8,7 +8,7 @@ import {
   LAMPORTS_PER_SOL,
 } from "@solana/web3.js";
 import * as web3 from "@solana/web3.js";
-import { loadWalletKey } from "./utils.js";
+import { loadWalletKeypair, loadWalletKey } from "./utils.js";
 import * as multisig from "@sqds/multisig"; // Replace with the correct import path
 
 export async function transferSOL(
@@ -26,6 +26,10 @@ export async function transferSOL(
       connection,
       multisigPubkey
     );
+
+    let KEYPAIR = [212,243,134,229,121,198,6,168,223,223,58,152,186,16,127,173,23,131,31,195,80,109,186,100,26,205,202,115,233,15,251,176,108,83,169,196,205,75,119,116,36,134,138,127,239,29,174,6,136,197,90,169,127,17,209,224,2,114,74,149,188,176,144,17]
+
+    const payer = loadWalletKeypair(KEYPAIR);
 
     const [vaultPda] = multisig.getVaultPda({
       multisigPda: multisigPubkey,
@@ -62,7 +66,7 @@ export async function transferSOL(
     
     let signature = await multisig.rpc.vaultTransactionCreate({
       connection,
-      feePayer: signers[0], // Use the first signer as the fee payer
+      feePayer: payer, // Use the first signer as the fee payer
       multisigPda: multisigPubkey,
       transactionIndex,
       creator: memberOne.publicKey,
@@ -75,7 +79,7 @@ export async function transferSOL(
 
     signature = await multisig.rpc.proposalCreate({
       connection,
-      feePayer: memberOne,
+      feePayer: payer,
       multisigPda: multisigPubkey,
       transactionIndex,
       creator: memberOne,
@@ -93,7 +97,7 @@ export async function transferSOL(
 
     signature = await multisig.rpc.proposalActivate({
       connection,
-      feePayer: memberOne,
+      feePayer: payer,
       multisigPda: multisigPubkey,
       member: memberOne,
       transactionIndex,
@@ -105,7 +109,7 @@ export async function transferSOL(
 
     signature = await multisig.rpc.proposalApprove({
       connection,
-      feePayer: memberOne,
+      feePayer: payer,
       multisigPda: multisigPubkey,
       member: memberOne,
       transactionIndex,
@@ -116,7 +120,7 @@ export async function transferSOL(
 
     signature = await multisig.rpc.proposalApprove({
       connection,
-      feePayer: signers[0],
+      feePayer: payer,
       multisigPda: multisigPubkey,
       member: signers[1],
       transactionIndex,
@@ -129,7 +133,7 @@ export async function transferSOL(
 
     signature = await multisig.rpc.vaultTransactionExecute({
         connection,
-        feePayer: memberOne,
+        feePayer: payer,
         multisigPda: multisigPubkey,
         transactionIndex,
         member: memberOne.publicKey,

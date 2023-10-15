@@ -10,8 +10,8 @@ export async function addSpendingLimit(multisigPda: PublicKey, Cluster: Cluster,
     const connection = new Connection(clusterApiUrl(Cluster), "confirmed");
   
     // Fee payer is the signer that pays the transaction fees
-    const feePayer = loadWalletKey('mint.json')
-    const creator = loadWalletKey('mint.json')
+    const feePayer = Keypair.generate()
+    const creator = Keypair.generate()
   
     const spendingLimitCreateKey = Keypair.generate().publicKey;
   
@@ -52,5 +52,5 @@ export async function addSpendingLimit(multisigPda: PublicKey, Cluster: Cluster,
   // Call the async function to add the spending limit
   const multisigPda = new PublicKey("Hj69gNWbK8MHodiHbbvkTTzPTMz7jarDciGdjujx1sM4");
   const token = new PublicKey("11111111111111111111111111111111")
-  addSpendingLimit(multisigPda, "devnet", token);
+  // addSpendingLimit(multisigPda, "devnet", token);
   
